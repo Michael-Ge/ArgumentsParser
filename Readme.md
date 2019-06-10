@@ -5,16 +5,17 @@
     public static void main(String[] args){
 
         String msg = ArgumentsParser.builder()
-                //有值的参数项
+                //Option with parameter values
                 .setOptions("-a","-b","-c","-d")
-                //无值的参数项
+                //Option without parameter values
                 .setOptionsWithoutValue("-k","-l","-m","-n")
-                //参数项与参数值之间的分隔符
-                .setValueSeparator("=","")
+                //Separator between option and value
+                .setValueSeparator("=","") 
+                //Command line arguments
                 .setArgs(args)
                 .build()
                 .check((argument)->{
-                    //可以在这里检查每个参数项，如果不正确则可以抛出 IllegalArgumentException 异常
+                    //You can check each parameter item here, if it is not correct, you can throw an IllegalArgumentException
                     if (StringUtils.isEmpty(argument.getOption())){
                         System.out.println("argument：" + argument.getValue());
                         System.out.println("--------------------");
