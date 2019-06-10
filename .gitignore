@@ -1,0 +1,10 @@
+### IntelliJ IDEA ###
+.gradle
+.idea
+*.iws
+*.iml
+*.ipr
+
+
+### Output ###
+/build/
