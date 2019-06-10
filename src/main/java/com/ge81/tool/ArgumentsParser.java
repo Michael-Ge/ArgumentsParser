@@ -161,18 +161,23 @@ public class ArgumentsParser {
     }
 
     /**
-     * 循环迭代所有参数，包括缺省参数值
+     * 循环迭代所有参数，可以在这里检查参数是否正确，如果不正确可以抛出 {@link IllegalArgumentException} 异常
+     *
      * @param handler 处理器
      */
-    public ArgumentsParser arguments(ArgumentHandler handler){
-        for (Argument argument : mArguments){
-            handler.handler(argument);
-        }
+    public ArgumentsParser check(ArgumentChecker handler){
+        try{
+            for (Argument argument : mArguments){
+                handler.check(argument);
+            }
 
-        for (Argument argument : mDefaultValues){
-            handler.handler(argument);
+            for (Argument argument : mDefaultValues){
+                handler.check(argument);
+            }
+        } catch (IllegalArgumentException e){
+            mIllegalArgumentException = e;
         }
-
+        
         return this;
     }
 
@@ -362,7 +367,12 @@ public class ArgumentsParser {
         }
     }
     
-    public interface ArgumentHandler{
-        void handler(Argument argument);
+    public interface ArgumentChecker {
+        /**
+         * 查检参数是否正确，如果不正确可以抛出 {@link IllegalArgumentException} 异常
+         * @param argument 参数
+         * @throws IllegalArgumentException
+         */
+        void check(Argument argument) throws IllegalArgumentException;
     }
 }
