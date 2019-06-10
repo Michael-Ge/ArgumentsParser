@@ -1,5 +1,5 @@
-# 命令行参数解析类
-## 1. 用法
+# Command Line Arguments Parser
+## 1. USAGE
 ```java
 
     public static void main(String[] args){
