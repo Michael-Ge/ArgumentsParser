@@ -11,8 +11,8 @@
             .setValueSeparator("=","")
             .setArgs(args)
             .build()
-            .arguments((argument)->{
-                //可以在这里处理每个参数项，也可以调用 ArgumentsParser.getArguments*** 方法处理参数。
+            .check((argument)->{
+                //可以在这里检查每个参数项，如果不正确则可以抛出 IllegalArgumentException 异常
                 if (StringUtils.isEmpty(argument.getOption())){
                     System.out.println("argument：" + argument.getValue());
                     System.out.println("--------------------");
