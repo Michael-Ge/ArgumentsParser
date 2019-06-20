@@ -15,7 +15,7 @@ public class ArgumentsParser {
     private String[] mValueSeparator;
     private ArgumentsParser(){}
 
-    private List<Argument> mDefaultValues;
+    private List<Argument> mNonOptionArgs;
     private List<Argument> mArguments;
     private Map<String,Argument> mOptionMap;
 
@@ -24,7 +24,7 @@ public class ArgumentsParser {
     private void parse() throws IllegalArgumentException{
         mArguments = new ArrayList<>(mArgs.length);
         mOptionMap = new HashMap<>();
-        mDefaultValues = new ArrayList<>(mArgs.length);
+        mNonOptionArgs = new ArrayList<>(mArgs.length);
         
         Argument lastArgument = null;
 
@@ -130,7 +130,7 @@ public class ArgumentsParser {
                     if (!match){
                         //混合写法时只要有一个没有匹配则丢弃所解析结果
                         mArguments = Collections.emptyList();
-                        mDefaultValues = Collections.emptyList();
+                        mNonOptionArgs = Collections.emptyList();
                         mOptionMap = Collections.emptyMap();
                         throw new IllegalArgumentException("illegal argument: " + arg);
                     }
@@ -155,7 +155,7 @@ public class ArgumentsParser {
                 Argument argument = new Argument();
                 argument.original = arg;
                 argument.value = arg;
-                mDefaultValues.add(argument);
+                mNonOptionArgs.add(argument);
             }
         }
     }
@@ -171,7 +171,7 @@ public class ArgumentsParser {
                 handler.check(argument);
             }
 
-            for (Argument argument : mDefaultValues){
+            for (Argument argument : mNonOptionArgs){
                 handler.check(argument);
             }
         } catch (IllegalArgumentException e){
@@ -207,7 +207,7 @@ public class ArgumentsParser {
      * @param option 选项名称，如  -a -p --h 等。
      * @return Argument，或能为 null
      */
-    public Argument getArgumentWithOption(String option){
+    public Argument getOptionArgs(String option){
         return mOptionMap.get(option);
     }
 
@@ -217,8 +217,8 @@ public class ArgumentsParser {
      *
      * @return List
      */
-    public List<Argument> getArguments(){
-        return mDefaultValues;
+    public List<Argument> getNonOptionArgs(){
+        return mNonOptionArgs;
     }
 
     public static Builder builder(){
@@ -352,7 +352,7 @@ public class ArgumentsParser {
          * @param option 选项名称，如  -a -p --h 等。
          * @return Argument，或能为 null
          */
-        public Argument getArgumentWithOption(String option) {
+        public Argument getOptionArgs(String option) {
             return mOptionMap.get(option);
         }
 
@@ -362,8 +362,8 @@ public class ArgumentsParser {
          *
          * @return List
          */
-        public List<Argument> getArguments(){
-            return mDefaultValues;
+        public List<Argument> getNonOptionArgs(){
+            return mNonOptionArgs;
         }
     }
     
