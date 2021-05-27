@@ -7,10 +7,9 @@ package com.ge81.tool;
 
 public class Main {
     public static void main(String[] args){
-
         String msg = ArgumentsParser.builder()
                 //有值的参数项
-                .setOptions("-a","-b","-c","-d")
+                .setOptions("-a","-b","-c","-d","-x")
                 //无值的参数项
                 .setOptionsWithoutValue("-k","-l","-m","-n")
                 //参数项与参数值之间的分隔符

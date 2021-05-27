@@ -3,12 +3,22 @@ plugins {
 }
 
 group 'com.ge81.tool'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+jar {
+    manifestContentCharset 'utf-8'
+    metadataCharset 'utf-8'
+    version='1.0.0'
+    manifest {
+        attributes "Main-Class":"com.ge81.tool.Main"
+        attributes "Created-By":"Michael Ge"
+    }
 }
 
 dependencies {

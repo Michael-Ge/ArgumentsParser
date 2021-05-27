@@ -48,7 +48,7 @@ public class ArgumentsParser {
             
             if (mOptions != null && mOptions.size() > 0){
                 //1. 首先直接查找是否在参数名列表中存在。
-                if (mOptions.remove(arg)){
+                if (mOptions.contains(arg)){
                     Argument argument = new Argument();
                     argument.option = arg;
                     argument.original = arg;
@@ -61,7 +61,7 @@ public class ArgumentsParser {
                     continue;
                 }
 
-                //2. 参数值中没有有可能是 参数名与参数值粘合在一起的情况，如：
+                //2. 选项没有在选项列表中有可能是 参数名与参数值粘合在一起的情况，如：
                 //   -p8080 或 -p=8080 等，这时查找是否是以指定的参数名开头
                 if (mValueSeparator != null && mValueSeparator.length > 0){
                     boolean match = false;
@@ -69,11 +69,17 @@ public class ArgumentsParser {
                         //找到以某个参数名称开头，如 -p8080，则是以 -p 参数名开头
                         if (arg.startsWith(option)){
                             int offset = option.length(); //参数值在字符串中的起始位置
-
+                            
                             //查找是否含有参数值分隔符
                             for (String separator:mValueSeparator){
-                                int ol = separator.length();
-                                if (arg.substring(offset,offset + ol).equalsIgnoreCase(separator)){
+                                int ol = separator.length(); 
+                                if (ol == 0 && Character.isDigit(arg.charAt(offset))) {
+                                    //对于选项值与名称连在一起的情况仅支持数值值
+                                    offset += ol;
+                                    match = true;
+                                    break;
+                                }
+                                else if (ol > 0 && arg.substring(offset,offset + ol).equalsIgnoreCase(separator)){
                                     offset += ol;
                                     match = true;
                                     break;
@@ -83,8 +89,6 @@ public class ArgumentsParser {
                             if (!match){
                                 continue;
                             }
-
-                            mOptions.remove(option);
                             
                             //取出参数值
                             String value = arg.substring(offset);
